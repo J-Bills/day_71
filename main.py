@@ -7,7 +7,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
-import os
+from dotenv import dotenv_values
+
+config = dotenv_values('.env')
 
 
 class Base(DeclarativeBase):
@@ -29,11 +31,11 @@ class Movie(db.Model):
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6c'
+app.config['SECRET_KEY'] = config.get('MOVIE_FLASK_KEY')
 Bootstrap5(app)
 
 class SearchMovie():
-    API_RAC = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZWY1YTAyZjY1YzVmMGZiODQ3ZTNjMjA4ZDk2ZGEyYyIsInN1YiI6IjY2NjkxYzZjZjRmMmNlMjllN2ZkMTU2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wPLX_dPEkjE8WuEXoltngfhd2RmtVViPbmLu3cN7ruc'
+    API_RAC = config.get('MOVIE_API_RAC')
 
     def __init__(self):
         self.url = "https://api.themoviedb.org/3/authentication"
@@ -190,4 +192,4 @@ if __name__ == '__main__':
         # db.session.commit()
         db.create_all()
 
-    app.run(debug=True)
+    app.run(debug=False)
